@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	 <script type="text/javascript">
+ 	
+     function parseStr(cmdArr){
+
+      var returnObj={};
+        
+      // console.info();
+       //检查参数的长度
+       if (cmdArr.length<4){
+          console.info("error package...");
+         return false }
+              
+        else{
+         //第一步：获取数据日期
+         
+          var year ='20'+parseInt(cmdArr[0].substr(20,2),16);
+          var month =parseInt(cmdArr[0].substr(22,2),16);
+          var day =parseInt(cmdArr[0].substr(24,2),16);
+          var date = year + "-"+month+"-"+day;
+          returnObj.stepDate =date ;
+
+
+           var bsdata = ""; 
+
+          for(var index=1;index<cmdArr.length;index++){
+              bsdata+= cmdArr[index].substr(6,cmdArr[index].length);
+          }
+
+          console.info(bsdata);
+            
+            var size =bsdata.length/4;
+  			var stepsHex = new Array();
+            var startindex=0;
+            for(var l=0;l<size;l++){
+                             
+                var stepHex=bsdata.substring(startindex,4);            
+                stepsHex.push(stepHex);
+                bsdata = bsdata.substring(4,bsdata.length);
+
+
+            }
+
+         //console.info(stepsHex[stepsHex.length-1]);
+
+         var steps = new Array();
+
+         for (var j=0;j<stepsHex.length;j+=2){
+               
+             var tmp= parseInt(stepsHex[j],16)+parseInt(stepsHex[j+1],16);  
+              steps.push(tmp);
+
+         }
+
+         if(steps.length<24){
+
+                var left = 24-steps.length;
+                for(var ll =0; ll<left;ll++){
+                	steps.push(0);
+                }
+
+         }
+           
+          var returnStr="";
+          var totalSteps=0;
+         
+           for(var h=0;h<steps.length;h++){
+
+           	  returnStr+=steps[h];
+           	  totalSteps+=steps[h];
+
+           	  if(h == steps.length-1){
+           	          
+           	  }
+           	  else{
+           	  	returnStr+='-';
+           	  }
+           }
+             //总步数
+             returnObj.totalstep =totalSteps;
+             //每小时步数
+             returnObj.hourdata =returnStr;
+             //总长度
+             returnObj.totalm=totalSteps*0.6;
+            
+            return returnObj;
+         
+         
+
+        }
+
+      
+
+     } //end of the method parseStr 
+
+   
+    //just take a test ........
+    
+     var cmdArr = new Array( "5a05010030000100000310081f1e18", "5a05020000000000000000000000000000000000", "5a05030000000000000000000000000000000000", "5a05fe0000000000000000000000c400d7");
+
+     var obj =parseStr(cmdArr);
+     alert ("totalstep:"+obj.totalstep+" hourdata:"+obj.hourdata+" totalm:"+obj.totalm+" stepDate:"+obj.stepDate);
+
+
+ </script>
+</head>
+
+
+<body>
+
+</body>
+</html>
